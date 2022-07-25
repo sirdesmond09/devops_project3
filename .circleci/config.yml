@@ -45,12 +45,12 @@ commands:
 jobs:
   notify_on_success:
     docker:
-    - image: cimg/base:stable
+      - image: cimg/base:stable
     steps:
-    - slack/notify:
-        event: pass
-        channel: 03-cloud-devops
-        template: success_tagged_deployment_1
+      - slack/notify:
+          event: pass
+          channel: 03-cloud-devops
+          template: success_tagged_deployment_1
 
   build-frontend:
     docker:
