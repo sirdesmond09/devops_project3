@@ -361,15 +361,20 @@ jobs:
 
   smoke-test:
     docker:
-      - image: cimg/python:3.10 # Lightweight Docker image 
+      - image: python:3.7-alpine3.11 # Lightweight Docker image 
     steps:
       - checkout # Checkout code from git
+      - run: apk add --update tar gzip
       - install_awscli
       - install_nodejs 
       - run:
           name: Install dependencies
           command: |
-            npm install
+            apk add --update --no-cache 
+            apk add --update curl
+            apk add --update npm
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url and smoke test
           command: |
@@ -377,14 +382,13 @@ jobs:
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text)
-            echo "${BACKEND_PUBLIC_IP}"
             export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
             echo "${API_URL}"
-            if curl "${API_URL}/api/status"
+            if curl "${API_URL}/api/status" | grep "ok"
             then
-              exit 0
+              return 0
             else
-              exit 1
+              return 1
             fi
       - run:
           name: Frontend smoke test.
@@ -394,9 +398,9 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
-              exit 1
+              return 1
             else
-              exit 1
+              return 1
             fi
       - destroy-environment
       - revert-migrations 
