@@ -328,7 +328,7 @@ jobs:
       - install_awscli
       - install_nodejs
       - add_ssh_keys:
-          fingerprints: [""] # Add ssh keys with fingerprint
+          fingerprints: ["55:15:12:88:9f:5a:4e:0b:71:60:17:84:97:2f:f6:3b"] # Add ssh keys with fingerprint
       - attach_workspace:
           at: ~/# attach workspace
       - run:
@@ -365,14 +365,14 @@ jobs:
     steps:
       - checkout # Checkout code from git
       - run: apk add --update tar gzip
-      - install_awscli
-      - install_nodejs 
       - run:
           name: Install dependencies
           command: |
             apk add --update --no-cache 
             apk add --update curl
             apk add --update npm
+      - install_awscli
+      - install_nodejs 
       - attach_workspace:
           at: ~/
       - run:
