@@ -371,7 +371,12 @@ jobs:
             apk add --update --no-cache 
             apk add --update curl
             apk add --update npm
-      - install_awscli
+      - run:
+          name: Install dependencies (awscli)
+          command: |
+            apk --no-cache add py-pip
+            pip install awscli
+            
       - install_nodejs 
       - attach_workspace:
           at: ~/
