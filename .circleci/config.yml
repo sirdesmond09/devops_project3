@@ -361,7 +361,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: amazon/aws-cli # Lightweight Docker image 
+      - image: cimg/python:3.10 # Lightweight Docker image 
     steps:
       - checkout # Checkout code from git
       - install_awscli
