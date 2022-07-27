@@ -249,7 +249,7 @@ jobs:
       - install_awscli
       - install_ansible
       - add_ssh_keys:
-          fingerprints: ["70:59:e2:e6:ca:f6:3f:86:db:2b:06:29:84:f4:2e:39"] # Add ssh keys with fingerprint
+          fingerprints: ["55:15:12:88:9f:5a:4e:0b:71:60:17:84:97:2f:f6:3b"] # Add ssh keys with fingerprint
       - attach_workspace:
           at: ~/ # attach workspace
       - run:
@@ -328,7 +328,7 @@ jobs:
       - install_awscli
       - install_nodejs
       - add_ssh_keys:
-          fingerprints: ["70:59:e2:e6:ca:f6:3f:86:db:2b:06:29:84:f4:2e:39"] # Add ssh keys with fingerprint
+          fingerprints: [""] # Add ssh keys with fingerprint
       - attach_workspace:
           at: ~/# attach workspace
       - run:
@@ -380,11 +380,11 @@ jobs:
             echo "${BACKEND_PUBLIC_IP}"
             export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
             echo "${API_URL}"
-            if curl "${API_URL}/api/status" | grep "ok"
+            if curl "${API_URL}/api/status"
             then
-                exit 0
+                return 0
             else
-                exit 1
+                return 1
             fi
       - run:
           name: Frontend smoke test.
