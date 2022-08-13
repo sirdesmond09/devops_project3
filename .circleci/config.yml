@@ -341,10 +341,8 @@ jobs:
           become: true
           command: |
             cd backend
-            ls
             npm run build
             tar -czf artifact.tar.gz dist/* package*  
-            ls
             cd ..
             cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
           
@@ -407,7 +405,7 @@ jobs:
               return 1
             else
               return 1
-            fi
+            f
       # - destroy-environment
       # - revert-migrations 
 
