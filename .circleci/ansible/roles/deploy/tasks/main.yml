@@ -8,7 +8,7 @@
   copy:
     # src: ~/projects/.circleci/ansible/roles/deploy/files/artifact.tar.gz
     src: ~/projects/artifact.tar.gz
-    dest: /home/ubuntu/
+    dest: /home/ubuntu/artifact.tar.gz
 
 
 - name: "Start app with PM2"
