@@ -339,7 +339,6 @@ jobs:
             npm install
       - run:
           name: Package Backend
-          become: true
           command: |
             cd backend
             npm run build
@@ -352,7 +351,6 @@ jobs:
 
       - run:
           name: Deploy backend
-          become: true
           command: |
             # export TYPEORM_MIGRATIONS_DIR=./migrations
             # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
@@ -409,8 +407,8 @@ jobs:
             else
               return 1
             f
-      - destroy-environment
-      - revert-migrations 
+      # - destroy-environment
+      # - revert-migrations 
 
 #   cloudfront-update:
 #     docker:
