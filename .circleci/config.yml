@@ -341,7 +341,6 @@ jobs:
             npm install
       - run:
           name: Package Backend
-          become: true
           command: |
             # cd backend
             # npm run build
