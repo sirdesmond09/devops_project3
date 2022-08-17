@@ -44,8 +44,7 @@
 - name: "Install Dependencies"
   become: true
   shell: |
-    tar -xvf artifact.tar.gz .
-    rm artifact.tar.gz
+    tar -xvf artifact.tar.gz
     npm install
 
 - name: start app
