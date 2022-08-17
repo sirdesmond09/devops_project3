@@ -328,8 +328,6 @@ jobs:
       - install_ansible
       - install_awscli
       - install_nodejs
-      - run: apk add --update tar gzip
-      - run: apk add --update curl
       - add_ssh_keys:
           fingerprints: ["55:15:12:88:9f:5a:4e:0b:71:60:17:84:97:2f:f6:3b"] # Add ssh keys with fingerprint
       - attach_workspace:
