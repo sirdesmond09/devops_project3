@@ -44,7 +44,7 @@
 - name: "Install Dependencies"
   become: true
   shell: |
-    cd ~/backend-app
+    cd ~/backend-app/
     tar -xvf artifact.tar.gz
     npm install
 
