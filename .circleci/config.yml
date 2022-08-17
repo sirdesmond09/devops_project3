@@ -338,7 +338,7 @@ jobs:
             cd backend
             npm install
       - run:
-          name: Package Backend
+          name: Package and ship Backend
           command: |
             # cd backend
             # npm run build
@@ -349,7 +349,7 @@ jobs:
 
             echo "Running backend -----"
             cd backend
-            npm install --legacy-peer-deps
+            npm install 
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
