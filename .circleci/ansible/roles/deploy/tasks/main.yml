@@ -4,35 +4,56 @@
 #     path: ~/backend-app
 #     state: directory
 
-- name: "Copy backend files"
-  copy:
-    # src: ~/projects/.circleci/ansible/roles/deploy/files/artifact.tar.gz
-    src: ~/projects/artifact.tar.gz
-    dest: /home/ubuntu/artifact.tar.gz
+# - name: "Copy backend files"
+#   copy:
+#     # src: ~/projects/.circleci/ansible/roles/deploy/files/artifact.tar.gz
+#     src: ~/projects/artifact.tar.gz
+#     dest: /home/ubuntu/artifact.tar.gz
 
 
-- name: "Start app with PM2"
+# - name: "Start app with PM2"
+#   become: true
+#   shell: |
+#     cd /home/ubuntu/
+#     tar xzyf artifact.tar.gz
+#     npm install
+#     pm run build
+#     pm2 stop default
+#     pm2 start npm --start -f
+
+- name: Create app directory
+  file:
+    path: ~/backend-app
+    state: directory
+
+- name: "Copy files to server"
+  ansible.builtin.copy:
+    src: "files/artifact.tar.gz"
+    dest: "~/backend-app/artifact.tar.gz"
+    follow: yes
+
+- name: "install dependencies."
+  become: true
+  apt:
+    name:
+      - nodejs
+      - npm
+    state: latest
+    update_cache: yes
+
+- name: "Install Dependencies"
   become: true
   shell: |
-    cd /home/ubuntu/
-    tar xzyf artifact.tar.gz
+    tar -xvf artifact.tar.gz .
+    rm artifact.tar.gz
     npm install
-    pm run build
-    pm2 stop default
-    pm2 start npm --start -f
 
-  environment:
-    NODE_ENV: production
-    VERSION: "1"
-    TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
-    TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-    TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
-    TYPEORM_PORT: 5432
-    TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-    TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
-    TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-    TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
-    TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+- name: start app
+  become: true
+  shell: |
+    sudo pm2 stop default
+    sudo pm2 start npm -- run start
+
 
 
 #   register: execute_node

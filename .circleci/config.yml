@@ -328,10 +328,12 @@ jobs:
       - install_ansible
       - install_awscli
       - install_nodejs
+      - run: apk add --update tar gzip
+      - run: apk add --update curl
       - add_ssh_keys:
           fingerprints: ["55:15:12:88:9f:5a:4e:0b:71:60:17:84:97:2f:f6:3b"] # Add ssh keys with fingerprint
       - attach_workspace:
-          at: ~/# attach workspace
+          at: ~/ # attach workspace
       - run:
           name: Install dependencies
           command: |
@@ -341,26 +343,38 @@ jobs:
           name: Package Backend
           become: true
           command: |
+            # cd backend
+            # npm run build
+            # cd ..
+            # tar -C backend -czvf artifact.tar.gz  .
+            
+            # # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+
+            echo "Running backend -----"
             cd backend
+            npm install --legacy-peer-deps
             npm run build
             cd ..
-            tar -C backend -czvf artifact.tar.gz  .
-            
-            # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+            tar -C backend -czvf artifact.tar.gz .
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/ 
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            echo "Contents of the inventory file is ..."
+            cat .circleci/ansible/inventory.txt
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
             
           
 
-      - run:
-          name: Deploy backend
-          become: true
-          command: |
-            # export TYPEORM_MIGRATIONS_DIR=./migrations
-            # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-            # export TYPEORM_MIGRATIONS=./migrations/*.ts
+      # - run:
+      #     name: Deploy backend
+      #     become: true
+      #     command: |
+      #       # export TYPEORM_MIGRATIONS_DIR=./migrations
+      #       # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+      #       # export TYPEORM_MIGRATIONS=./migrations/*.ts
 
-            cd .circleci/ansible
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+      #       cd .circleci/ansible
+      #       cat inventory.txt
+      #       ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
       
@@ -409,8 +423,8 @@ jobs:
             else
               return 1
             f
-      - destroy-environment
-      - revert-migrations 
+      # - destroy-environment
+      # - revert-migrations 
 
 #   cloudfront-update:
 #     docker:
