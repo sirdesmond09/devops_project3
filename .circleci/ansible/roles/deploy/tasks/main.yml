@@ -56,16 +56,14 @@
     rm artifact.tar.gz
     npm install
     npm run build
+
+
+
+- name: start app
+  become: true
+  shell: |
     sudo pm2 stop default
-    sudo pm2 start npm --start -f
-
-
-
-# - name: start app
-#   become: true
-#   shell: |
-#     sudo pm2 stop default
-#     sudo pm2 start npm -- run start
+    sudo pm2 start npm -- run start
 
 
 
