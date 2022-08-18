@@ -38,8 +38,6 @@
     name:
       - nodejs
       - npm
-    state: latest
-    update_cache: yes
 
 # - name: "Install Dependencies"
 #   become: true
