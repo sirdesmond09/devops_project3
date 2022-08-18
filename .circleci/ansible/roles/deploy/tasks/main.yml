@@ -23,13 +23,13 @@
 
 - name: Create app directory
   file:
-    path: ~/backend-app
+    path: $HOME/backend-app
     state: directory
 
 - name: "Copy files to server"
   ansible.builtin.copy:
     src: "files/artifact.tar.gz"
-    dest: "~/backend-app/artifact.tar.gz"
+    dest: "$HOME/artifact.tar.gz"
     follow: yes
 
 # - name: "Install Dependencies"
@@ -52,7 +52,6 @@
 - name: "Unarchive artifacts and install NPM packages"
   become: true
   shell: |
-    cd ~/backend-app/
     tar -xvf artifact.tar.gz .
     rm artifact.tar.gz
     npm install
@@ -62,7 +61,7 @@
   become: true
   shell: |
     sudo pm2 stop default
-    sudo pm2 start npm --start -f
+    sudo pm2 start npm -- run start
 
 
 
