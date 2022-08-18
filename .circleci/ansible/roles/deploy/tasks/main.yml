@@ -29,7 +29,7 @@
 - name: "Copy files to server"
   ansible.builtin.copy:
     src: "files/artifact.tar.gz"
-    dest: "$HOME/artifact.tar.gz"
+    dest: "$HOME/backend-app/artifact.tar.gz"
     follow: yes
 
 # - name: "Install Dependencies"
@@ -52,16 +52,21 @@
 - name: "Unarchive artifacts and install NPM packages"
   become: true
   shell: |
+    cd $HOME/backend-app
     tar -xvf artifact.tar.gz .
     rm artifact.tar.gz
     npm install
-
-
-- name: start app
-  become: true
-  shell: |
+    npm run build
     sudo pm2 stop default
-    sudo pm2 start npm -- run start
+    sudo pm2 start npm --start -f
+
+
+
+# - name: start app
+#   become: true
+#   shell: |
+#     sudo pm2 stop default
+#     sudo pm2 start npm -- run start
 
 
 
