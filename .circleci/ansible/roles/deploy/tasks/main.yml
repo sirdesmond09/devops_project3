@@ -52,7 +52,6 @@
 - name: "Unarchive artifacts and install NPM packages"
   become: true
   shell: |
-    cd $HOME/backend-app
     tar -xvf artifact.tar.gz .
     rm artifact.tar.gz
     npm install
