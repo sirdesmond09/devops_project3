@@ -45,6 +45,7 @@
   become: true
   shell: |
     cd ~/backend-app/
+    ls
     tar -xvf artifact.tar.gz
     npm install
 
