@@ -29,7 +29,7 @@
 - name: "Copy files to server"
   ansible.builtin.copy:
     src: "files/artifact.tar.gz"
-    dest: "$HOME/backend-app/artifact.tar.gz"
+    dest: "$HOME/artifact.tar.gz"
     follow: yes
 
 # - name: "Install Dependencies"
