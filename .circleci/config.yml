@@ -347,7 +347,6 @@ jobs:
             
             # # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
 
-            echo "Running backend -----"
             cd backend
             npm install 
             npm run build
@@ -355,23 +354,10 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/ 
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-            echo "Contents of the inventory file is ..."
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
             
           
-
-      # - run:
-      #     name: Deploy backend
-      #     become: true
-      #     command: |
-      #       # export TYPEORM_MIGRATIONS_DIR=./migrations
-      #       # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-      #       # export TYPEORM_MIGRATIONS=./migrations/*.ts
-
-      #       cd .circleci/ansible
-      #       cat inventory.txt
-      #       ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
       
@@ -411,7 +397,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            export FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
             echo ${FRONTEND_URL} 
             if curl -s ${FRONTEND_URL} | grep "Welcome"
             then
@@ -419,9 +405,9 @@ jobs:
               return 1
             else
               return 1
-            f
-      # - destroy-environment
-      # - revert-migrations 
+            fi
+      - destroy-environment
+      - revert-migrations 
 
 #   cloudfront-update:
 #     docker:
