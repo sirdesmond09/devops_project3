@@ -1,27 +1,5 @@
 ---
-# - name: "Creates backend app directory"
-#   file:
-#     path: ~/backend-app
-#     state: directory
-
-# - name: "Copy backend files"
-#   copy:
-#     # src: ~/projects/.circleci/ansible/roles/deploy/files/artifact.tar.gz
-#     src: ~/projects/artifact.tar.gz
-#     dest: /home/ubuntu/artifact.tar.gz
-
-
-# - name: "Start app with PM2"
-#   become: true
-#   shell: |
-#     cd /home/ubuntu/
-#     tar xzyf artifact.tar.gz
-#     npm install
-#     pm run build
-#     pm2 stop default
-#     pm2 start npm --start -f
-
-- name: Create app directory
+- name: Create backend app directory
   file:
     path: $HOME/backend-app
     state: directory
@@ -31,22 +9,6 @@
     src: "files/artifact.tar.gz"
     dest: "$HOME/artifact.tar.gz"
     follow: yes
-
-# - name: "Install Dependencies"
-#   become: true
-#   shell: |
-#     cd ~/backend-app/
-#     tar -xvf artifact.tar.gz
-#     npm install
-
-# - name: "install dependencies."
-#   become: true
-#   apt:
-#     name:
-#       - nodejs
-#       - npm
-#     state: latest
-#     update_cache: yes
 
 
 - name: "Unarchive artifacts and install NPM packages"
@@ -63,17 +25,4 @@
   shell: |
     sudo pm2 stop default
     sudo pm2 start "npm run start"
-
-
-
-#   register: execute_node
-
-# - name: print message
-#   debug:
-#     msg: "{{ execute_node.stdout_lines }}"
-
-# - name: "Configure pm2 to start as service"
-#   shell: |
-#     sudo su -c "env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu"
-#     pm2 save
 
