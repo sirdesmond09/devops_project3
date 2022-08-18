@@ -54,7 +54,7 @@
   shell: |
     tar -xvf artifact.tar.gz .
     rm artifact.tar.gz
-    npm install
+    sudo npm install
 
 
 
