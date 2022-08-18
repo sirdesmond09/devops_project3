@@ -55,7 +55,6 @@
     tar -xvf artifact.tar.gz .
     rm artifact.tar.gz
     npm install
-    npm run build
 
 
 
