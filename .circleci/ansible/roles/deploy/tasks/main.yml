@@ -32,19 +32,21 @@
     dest: "~/backend-app/artifact.tar.gz"
     follow: yes
 
-- name: "install dependencies."
-  become: true
-  apt:
-    name:
-      - nodejs
-      - npm
-
 # - name: "Install Dependencies"
 #   become: true
 #   shell: |
 #     cd ~/backend-app/
 #     tar -xvf artifact.tar.gz
 #     npm install
+
+- name: "install dependencies."
+  become: true
+  apt:
+    name:
+      - nodejs
+      - npm
+    state: latest
+    update_cache: yes
 
 
 - name: "Unarchive artifacts and install NPM packages"
