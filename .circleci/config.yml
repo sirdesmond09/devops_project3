@@ -260,7 +260,8 @@ jobs:
             cat inventory.txt
 
             ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-environment     
+      - destroy-environment
+      - notify_on_failure     
 
   run-migrations:
     docker:
@@ -287,7 +288,8 @@ jobs:
                 echo "No migrations are pending" 
               fi
       - destroy-environment
-      - revert-migrations      
+      - revert-migrations 
+      - notify_on_failure     
 
   deploy-frontend:
     docker:
@@ -318,7 +320,8 @@ jobs:
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
-      - revert-migrations      
+      - revert-migrations  
+      - notify_on_failure    
                     
   deploy-backend:
     docker:
@@ -360,6 +363,7 @@ jobs:
           
       - destroy-environment
       - revert-migrations
+      - notify_on_failure
       
 
   smoke-test:
@@ -408,21 +412,47 @@ jobs:
             fi
       - destroy-environment
       - revert-migrations 
+      - notify_on_failure
 
-#   cloudfront-update:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  cloudfront-update:
+    docker:
+      - image: python:3.7-alpine3.11 # Docker image here that supports AWS CLI
+    steps:
+      - checkout # Checkout code from git
+      - run: apk add --update tar gzip
+      - run:
+          name: Install dependencies
+          command: |
+            apk --no-cache add py-pip
+            pip install awscli
+            
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            export OldWorkFlowID=$(aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --no-paginate --output text)
+            echo $OldWorkFlowID >> ~/OldWorkFlowID.txt
+            cat ~/OldWorkFlowID.txt
+
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name Udapeople \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+
+            echo old workflow ID is: "$OldWorkFlowID"
+            echo new workflow ID is: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+      - persist_to_workspace:
+          root: ~/
+          paths: 
+            - OldDistributionID.txt
+
+
+      - destroy-environment
+      - revert-migrations 
+      - notify_on_failure
 
 # cleanup:
 #     docker:
