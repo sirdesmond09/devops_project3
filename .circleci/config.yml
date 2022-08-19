@@ -449,12 +449,12 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths: 
-            - OldDistributionID.txt
+            - OldWorkFlowID.txt
 
 
       - destroy-environment
       - revert-migrations 
-      - notify_on_failure
+      # - notify_on_failure
 
 # cleanup:
 #     docker:
