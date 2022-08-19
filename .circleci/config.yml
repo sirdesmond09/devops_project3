@@ -436,9 +436,10 @@ jobs:
             cat ~/OldWorkFlowID.txt
 
             # Change the initial stack name, as applicable to you
+
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
-            --stack-name Udapeople \
+            --stack-name InitialStack \
             --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
 
