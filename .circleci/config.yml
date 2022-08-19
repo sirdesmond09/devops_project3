@@ -475,8 +475,8 @@ jobs:
           name: Get old stack workflow id
           command: |
             export OldWorkflowID=$(cat ~/OldWorkFlowID.txt)
-            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-            --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+            export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+            --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             
 
             echo OldWorkflowID: "${OldWorkflowID}"
