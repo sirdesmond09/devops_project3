@@ -494,7 +494,6 @@ jobs:
               echo "-----------------No stacks to delete-----------------------"
             fi
             
-node_memory_MemFree_bytes
 
 workflows:
   default:
