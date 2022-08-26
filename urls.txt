@@ -1,0 +1,7 @@
+1. Public Url to GitHub repository (not private) [URL01]
+
+https://github.com/sirdesmond09/devops_project3
+
+2. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
+
+http://udapeople-b285328.s3-website-us-east-1.amazonaws.com/#/employees
